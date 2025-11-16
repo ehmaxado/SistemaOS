@@ -13,7 +13,6 @@ public class DatabaseConnection {
             throw new RuntimeException("Erro ao conectar ao banco", e);
         }
     }
-
     public class DatabaseInitializer {
     public static void inicializar() {
         String sql = """
