@@ -8,5 +8,6 @@ Cadastro de OS
 	Lançar Descrição do serviço
 	Lançar Serviço
 	Lançar Produtos
-Lançar pagamentos
+	Lançar pagamentos
 Lista de pagamentos
+Relatórios (Ordem serviço e Pagamentos)
