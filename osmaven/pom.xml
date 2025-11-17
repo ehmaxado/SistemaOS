@@ -16,16 +16,44 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!-- ===== DEPENDÊNCIAS DEVEM ESTAR AQUI DENTRO ===== -->
-    <dependencies>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.7.4</version>
-        </dependency>
-    </dependencies>
-    <!-- ================================================ -->
 
+    <dependencies>
+    <!-- Javalin -->
+    <dependency>
+        <groupId>io.javalin</groupId>
+        <artifactId>javalin</artifactId>
+        <version>6.3.0</version>
+    </dependency>
+
+    <!-- Jackson core (obrigatório) -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.17.2</version>
+    </dependency>
+
+    <!-- Suporte a LocalDateTime -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <version>2.17.2</version>
+    </dependency>
+
+    <!-- Suporte a Records (ESSENCIAL) -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.module</groupId>
+        <artifactId>jackson-module-parameter-names</artifactId>
+        <version>2.17.2</version>
+    </dependency>
+
+    <!-- PostgreSQL -->
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.7.4</version>
+    </dependency>
+</dependencies>
+    
     <build>
         <plugins>
             <plugin>
