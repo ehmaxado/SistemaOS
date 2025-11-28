@@ -13,14 +13,13 @@ public class PessoaRoutes {
 
     private final PessoaController controller;
 
-    // Recebe a implementação real (não a interface!)
     public PessoaRoutes() {
-        // AQUI É O SEGREDO: instanciar a CLASSE que implementa a interface
-        IPessoaRepository repository = new PessoaRepository();  // ← CERTO
+        IPessoaRepository repository = new PessoaRepository();
         var useCase = new CriarPessoaUseCase(repository);
         this.controller = new PessoaController(useCase);
     }
 
+    // Registra rota POST /api/pessoas
     public void register(Javalin app) {
         app.post("/api/pessoas", ctx -> {
             try {

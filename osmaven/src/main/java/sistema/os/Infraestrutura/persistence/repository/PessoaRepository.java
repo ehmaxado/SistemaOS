@@ -4,14 +4,13 @@ import java.sql.*;
 
 import sistema.os.Infraestrutura.persistence.DatabaseConnection;
 import sistema.os.domain.Entidades.Pessoa;
-import sistema.os.domain.Enums.TipoPessoa;
 import sistema.os.domain.Interfaces.IPessoaRepository;
-import sistema.os.domain.ValueObjects.CpfCnpj;
-import sistema.os.domain.ValueObjects.Telefone;
 
 
 
 public class PessoaRepository implements IPessoaRepository {
+    
+    // Persiste pessoa no banco de dados
     @Override
     public void salvar(Pessoa pessoa) {
         String sql = "INSERT INTO pessoas (id, nome, cpf_cnpj, telefone, tipo, status, data_cadastro) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -29,29 +28,6 @@ public class PessoaRepository implements IPessoaRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar pessoa", e);
-        }
-    }
-
-    @Override
-    public Pessoa buscarPorCpfCnpj(String cpfCnpj) {
-        String sql = "SELECT * FROM pessoas WHERE cpf_cnpj = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, cpfCnpj);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return new Pessoa(
-                    rs.getString("nome"),
-                    new CpfCnpj(rs.getString("cpf_cnpj")),
-                   
-                    new Telefone(rs.getString("telefone")),
-                    TipoPessoa.valueOf(rs.getString("tipo"))
-                );
-            }
-            return null;
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar pessoa", e);
         }
     }
 }
