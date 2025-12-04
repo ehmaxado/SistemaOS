@@ -52,7 +52,7 @@ public class PessoaRoutes {
             }
         });
 
-        app.get("/api/pessoas/:id", ctx -> {
+        app.get("/api/pessoas/{id}", ctx -> {
             try {
                 String id = ctx.pathParam("id");
                 BuscarPessoaResponse response = controller.buscar(id);
@@ -65,7 +65,7 @@ public class PessoaRoutes {
             }
         });
 
-        app.delete("/api/pessoas/:id", ctx -> {
+        app.delete("/api/pessoas/{id}", ctx -> {
             try {
                 String id = ctx.pathParam("id");
                 DeletarPessoaResponse response = controller.deletar(id);

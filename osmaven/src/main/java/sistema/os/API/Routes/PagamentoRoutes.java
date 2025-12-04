@@ -63,7 +63,7 @@ public class PagamentoRoutes {
             }
         });
 
-        app.get("/api/pagamentos/:id", ctx -> {
+        app.get("/api/pagamentos/{id}", ctx -> {
             try {
                 String id = ctx.pathParam("id");
                 BuscarPagamentoResponse response = controller.buscarPorId(id);
@@ -76,7 +76,7 @@ public class PagamentoRoutes {
             }
         });
 
-        app.patch("/api/pagamentos/:id/status", ctx -> {
+        app.patch("/api/pagamentos/{id}/status", ctx -> {
             try {
                 String id = ctx.pathParam("id");
                 EditarStatusPagamentoRequest request = ctx.bodyAsClass(EditarStatusPagamentoRequest.class);
@@ -90,7 +90,7 @@ public class PagamentoRoutes {
             }
         });
 
-        app.delete("/api/pagamentos/:id", ctx -> {
+        app.delete("/api/pagamentos/{id}", ctx -> {
             try {
                 String id = ctx.pathParam("id");
                 DeletarPagamentoResponse response = controller.deletar(id);

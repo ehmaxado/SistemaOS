@@ -55,7 +55,7 @@ public class FormaPagamentoRoutes {
             }
         });
 
-        app.get("/api/formas-pagamento/:id", ctx -> {
+        app.get("/api/formas-pagamento/{id}", ctx -> {
             try {
                 String id = ctx.pathParam("id");
                 BuscarFormaPagamentoResponse response = controller.buscarPorId(id);
@@ -68,7 +68,7 @@ public class FormaPagamentoRoutes {
             }
         });
 
-        app.put("/api/formas-pagamento/:id", ctx -> {
+        app.put("/api/formas-pagamento/{id}", ctx -> {
             try {
                 String id = ctx.pathParam("id");
                 EditarFormaPagamentoRequest request = ctx.bodyAsClass(EditarFormaPagamentoRequest.class);
@@ -82,7 +82,7 @@ public class FormaPagamentoRoutes {
             }
         });
 
-        app.delete("/api/formas-pagamento/:id", ctx -> {
+        app.delete("/api/formas-pagamento/{id}", ctx -> {
             try {
                 String id = ctx.pathParam("id");
                 DeletarFormaPagamentoResponse response = controller.deletar(id);
