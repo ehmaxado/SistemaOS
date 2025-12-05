@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Produto {
-    private String nome;
     private final UUID id;
     private final String nome;
     private final String descricao;
