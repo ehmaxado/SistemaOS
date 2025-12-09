@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da OS - Sistema OS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html"><i class="bi bi-tools"></i> Sistema OS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="ordens-servico.html">Ordens de Serviço</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pessoas.html">Pessoas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="produtos.html">Produtos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="formas-pagamento.html">Formas de Pagamento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pagamentos.html">Pagamentos</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><span class="navbar-text me-3" id="nomeUsuario"></span></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-file-earmark-text"></i> Detalhes da OS</h2>
+            <a href="ordens-servico.html" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Informações da OS</h5>
+                    </div>
+                    <div class="card-body" id="infoOS">
+                        <p>Carregando...</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Serviços</h5>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalServico">
+                            <i class="bi bi-plus-circle"></i> Adicionar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Serviço</th>
+                                        <th>Quantidade</th>
+                                        <th>Valor Unit.</th>
+                                        <th>Subtotal</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaServicosOS">
+                                    <tr><td colspan="5" class="text-center">Nenhum serviço adicionado</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Produtos</h5>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalProduto">
+                            <i class="bi bi-plus-circle"></i> Adicionar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Quantidade</th>
+                                        <th>Valor Unit.</th>
+                                        <th>Subtotal</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaProdutosOS">
+                                    <tr><td colspan="5" class="text-center">Nenhum produto adicionado</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Pagamentos</h5>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalPagamento">
+                            <i class="bi bi-plus-circle"></i> Adicionar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Descrição</th>
+                                        <th>Valor</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaPagamentosOS">
+                                    <tr><td colspan="4" class="text-center">Nenhum pagamento adicionado</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>Resumo Financeiro</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Valor Serviços:</span>
+                            <strong id="valorServicos">R$ 0,00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Valor Produtos:</span>
+                            <strong id="valorProdutos">R$ 0,00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <strong id="subtotal">R$ 0,00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Desconto:</span>
+                            <strong id="desconto">R$ 0,00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Valor Adicional:</span>
+                            <strong id="valorAdicional">R$ 0,00</strong>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <span><strong>Total:</strong></span>
+                            <strong class="text-primary fs-5" id="valorTotal">R$ 0,00</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Status Pagamentos</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Total Pagamentos:</span>
+                            <strong id="totalPagamentos">R$ 0,00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Valor Pago:</span>
+                            <strong class="text-success" id="valorPago">R$ 0,00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Saldo Pendente:</span>
+                            <strong class="text-warning" id="saldoPendente">R$ 0,00</strong>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <span><strong>Diferença:</strong></span>
+                            <strong id="diferencaPagamento" class="fs-6">R$ 0,00</strong>
+                        </div>
+                        <small class="text-muted">Diferença = Total OS - Total Pagamentos</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Serviço -->
+    <div class="modal fade" id="modalServico" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Serviço</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formServico">
+                        <div class="mb-3">
+                            <label class="form-label">Serviço *</label>
+                            <select class="form-select" id="servicoId" required>
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantidade *</label>
+                            <input type="number" class="form-control" id="quantidadeServico" value="1" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Valor Unitário *</label>
+                            <input type="number" class="form-control" id="valorUnitarioServico" step="0.01" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="adicionarServico()">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Produto -->
+    <div class="modal fade" id="modalProduto" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Produto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formProduto">
+                        <div class="mb-3">
+                            <label class="form-label">Produto *</label>
+                            <select class="form-select" id="produtoId" required>
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantidade *</label>
+                            <input type="number" class="form-control" id="quantidadeProduto" value="1" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Valor Unitário *</label>
+                            <input type="number" class="form-control" id="valorUnitarioProduto" step="0.01" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="adicionarProduto()">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Forma de Pagamento -->
+    <div class="modal fade" id="modalFormaPagamento" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Forma de Pagamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formFormaPagamento">
+                        <div class="mb-3">
+                            <label class="form-label">Forma de Pagamento *</label>
+                            <input type="text" class="form-control" id="novaFormaPagamento" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarFormaPagamento()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Pagamento -->
+    <div class="modal fade" id="modalPagamento" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Pagamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPagamento">
+                        <div class="mb-3">
+                            <label class="form-label">Valor *</label>
+                            <input type="number" class="form-control" id="valorPagamento" step="0.01" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea class="form-control" id="descricaoPagamento" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="adicionarPagamento()">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Pagamento -->
+    <div class="modal fade" id="modalEditarPagamento" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Pagamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarPagamento">
+                        <input type="hidden" id="editarPagamentoId">
+                        <div class="mb-3">
+                            <label class="form-label">Valor *</label>
+                            <input type="number" class="form-control" id="editarValorPagamento" step="0.01" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea class="form-control" id="editarDescricaoPagamento" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarEdicaoPagamento()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+        if (!usuario.email) window.location.href = 'index.html';
+        document.getElementById('nomeUsuario').textContent = usuario.nome || usuario.email;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const osId = urlParams.get('id');
+
+        function logout() {
+            localStorage.removeItem('usuario');
+            window.location.href = 'index.html';
+        }
+
+        async function carregarDetalhesOS() {
+            try {
+                const response = await fetch(`${API_URL}/ordens-servico/${osId}`);
+                if (response.ok) {
+                    const os = await response.json();
+                    console.log('OS carregada:', os);
+                    exibirDetalhesOS(os);
+                    exibirServicosOS(os.servicos || []);
+                    exibirProdutosOS(os.produtos || []);
+                    await carregarPagamentosOS();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar OS:', error);
+            }
+        }
+
+        function exibirDetalhesOS(os) {
+            osAtual = os; // Salva para usar em outras funções
+            const infoDiv = document.getElementById('infoOS');
+            const statusBadge = os.dataFechamento ? 
+                '<span class="badge bg-success">CONCLUÍDA</span>' : 
+                '<span class="badge bg-info">ABERTA</span>';
+            
+            infoDiv.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <strong>Número OS:</strong> ${os.numeroOS || '-'}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Status:</strong> ${statusBadge}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Cliente ID:</strong> ${os.clienteId || '-'}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Técnico ID:</strong> ${os.id_usuario || '-'}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Data Abertura:</strong> ${os.dataAbertura ? new Date(os.dataAbertura).toLocaleString('pt-BR') : '-'}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Data Fechamento:</strong> ${os.dataFechamento ? new Date(os.dataFechamento).toLocaleString('pt-BR') : '-'}
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <strong>Observações:</strong> ${os.observacaoGeral || '-'}
+                    </div>
+                    ${!os.dataFechamento ? `
+                    <div class="col-md-12">
+                        <button class="btn btn-success" onclick="concluirOS()">
+                            <i class="bi bi-check-circle"></i> Concluir OS
+                        </button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+
+            // Atualizar resumo financeiro
+            document.getElementById('valorServicos').textContent = `R$ ${(os.valorTotalServicos || 0).toFixed(2)}`;
+            document.getElementById('valorProdutos').textContent = `R$ ${(os.valorTotalProdutos || 0).toFixed(2)}`;
+            document.getElementById('subtotal').textContent = `R$ ${(os.valorTotal || 0).toFixed(2)}`;
+            document.getElementById('desconto').textContent = `R$ 0,00`;
+            document.getElementById('valorAdicional').textContent = `R$ 0,00`;
+            document.getElementById('valorTotal').textContent = `R$ ${(os.valorTotalFinal || 0).toFixed(2)}`;
+        }
+        
+        function exibirServicosOS(servicos) {
+            const tbody = document.getElementById('tabelaServicosOS');
+            if (servicos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum serviço adicionado</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = servicos.map(s => `
+                <tr>
+                    <td>${s.descricao || '-'}</td>
+                    <td>${s.quantidade}</td>
+                    <td>R$ ${(s.valorUnitario || 0).toFixed(2)}</td>
+                    <td>R$ ${(s.valorTotal || 0).toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1" onclick="editarServico('${s.servicoId}', ${s.quantidade}, ${s.valorUnitario})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="removerServico('${s.servicoId}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function exibirProdutosOS(produtos) {
+            const tbody = document.getElementById('tabelaProdutosOS');
+            if (produtos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum produto adicionado</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = produtos.map(p => `
+                <tr>
+                    <td>${p.nome || '-'}</td>
+                    <td>${p.quantidade}</td>
+                    <td>R$ ${(p.valorUnitario || 0).toFixed(2)}</td>
+                    <td>R$ ${(p.valorTotal || 0).toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1" onclick="editarProduto('${p.produtoId}', ${p.quantidade}, ${p.valorUnitario})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="removerProduto('${p.produtoId}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function carregarServicos() {
+            try {
+                const response = await fetch(`${API_URL}/servicos`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const servicos = Array.isArray(data) ? data : [];
+                    const select = document.getElementById('servicoId');
+                    select.innerHTML = '<option value="">Selecione...</option>' +
+                        servicos.filter(s => s.ativo).map(s => `<option value="${s.id}" data-preco="${s.valorPadrao}">${s.descricao} - R$ ${s.valorPadrao.toFixed(2)}</option>`).join('');
+                    
+                    select.addEventListener('change', function() {
+                        const option = this.options[this.selectedIndex];
+                        if (option.dataset.preco) {
+                            document.getElementById('valorUnitarioServico').value = option.dataset.preco;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+            }
+        }
+
+        async function carregarProdutos() {
+            try {
+                const response = await fetch(`${API_URL}/produtos`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const produtos = data.produtos || data;
+                    const select = document.getElementById('produtoId');
+                    select.innerHTML = '<option value="">Selecione...</option>' +
+                        produtos.filter(p => p.ativo).map(p => `<option value="${p.id}" data-preco="${p.valorVenda}">${p.nome} - R$ ${p.valorVenda.toFixed(2)}</option>`).join('');
+                    
+                    select.addEventListener('change', function() {
+                        const option = this.options[this.selectedIndex];
+                        if (option.dataset.preco) {
+                            document.getElementById('valorUnitarioProduto').value = option.dataset.preco;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+            }
+        }
+
+        async function adicionarServico() {
+            const servicoId = document.getElementById('servicoId').value;
+            const quantidade = parseInt(document.getElementById('quantidadeServico').value);
+            const valorUnitario = parseFloat(document.getElementById('valorUnitarioServico').value);
+            
+            if (!servicoId || !quantidade || !valorUnitario) {
+                alert('Preencha todos os campos');
+                return;
+            }
+
+            const dados = {
+                servicoId: servicoId,
+                quantidade: quantidade,
+                valorTotal: quantidade * valorUnitario
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/ordens-servico/${osId}/servicos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
+                    document.getElementById('formServico').reset();
+                    carregarDetalhesOS();
+                    alert('Serviço adicionado com sucesso!');
+                } else {
+                    alert('Erro ao adicionar serviço');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        async function adicionarProduto() {
+            const produtoId = document.getElementById('produtoId').value;
+            const quantidade = parseInt(document.getElementById('quantidadeProduto').value);
+            const valorUnitario = parseFloat(document.getElementById('valorUnitarioProduto').value);
+            
+            if (!produtoId || !quantidade || !valorUnitario) {
+                alert('Preencha todos os campos');
+                return;
+            }
+
+            const dados = {
+                produtoId: produtoId,
+                quantidade: quantidade,
+                valorTotal: quantidade * valorUnitario
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/ordens-servico/${osId}/produtos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalProduto')).hide();
+                    document.getElementById('formProduto').reset();
+                    carregarDetalhesOS();
+                    alert('Produto adicionado com sucesso!');
+                } else {
+                    alert('Erro ao adicionar produto');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+        
+        async function removerServico(servicoId) {
+            if (!confirm('Deseja realmente remover este serviço?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/ordens-servico/${osId}/servicos/${servicoId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    carregarDetalhesOS();
+                    alert('Serviço removido com sucesso!');
+                } else {
+                    alert('Erro ao remover serviço');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+        
+        async function removerProduto(produtoId) {
+            if (!confirm('Deseja realmente remover este produto?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/ordens-servico/${osId}/produtos/${produtoId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    carregarDetalhesOS();
+                    alert('Produto removido com sucesso!');
+                } else {
+                    alert('Erro ao remover produto');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+        
+        async function concluirOS() {
+            if (!confirm('Deseja realmente concluir esta Ordem de Serviço?')) return;
+            
+            try {
+                // Criar endpoint PATCH para concluir OS
+                const response = await fetch(`${API_URL}/ordens-servico/${osId}/concluir`, {
+                    method: 'PATCH'
+                });
+                
+                if (response.ok) {
+                    carregarDetalhesOS();
+                    alert('Ordem de Serviço concluída com sucesso!');
+                } else {
+                    alert('Erro ao concluir OS');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        function editarServico(servicoId, quantidade, valorUnitario) {
+            // Preenche os campos do modal com os dados atuais
+            document.getElementById('servicoId').value = servicoId;
+            document.getElementById('quantidadeServico').value = quantidade;
+            document.getElementById('valorUnitarioServico').value = valorUnitario;
+            document.getElementById('servicoId').disabled = true; // Não permite trocar o serviço, só quantidade/valor
+            
+            // Muda o botão para "Atualizar" e a função chamada
+            const modal = new bootstrap.Modal(document.getElementById('modalServico'));
+            modal.show();
+            
+            // Muda temporariamente o comportamento do botão
+            const btnAdicionar = document.querySelector('#modalServico .btn-primary');
+            btnAdicionar.textContent = 'Atualizar';
+            btnAdicionar.onclick = async function() {
+                await atualizarServico(servicoId);
+                document.getElementById('servicoId').disabled = false;
+                btnAdicionar.textContent = 'Adicionar';
+                btnAdicionar.onclick = adicionarServico;
+            };
+        }
+
+        async function atualizarServico(servicoId) {
+            const quantidade = parseInt(document.getElementById('quantidadeServico').value);
+            const valorUnitario = parseFloat(document.getElementById('valorUnitarioServico').value);
+            
+            if (!quantidade || !valorUnitario) {
+                alert('Preencha todos os campos');
+                return;
+            }
+
+            // Remove e adiciona novamente (já que não temos endpoint PATCH específico)
+            try {
+                await fetch(`${API_URL}/ordens-servico/${osId}/servicos/${servicoId}`, { method: 'DELETE' });
+                
+                const response = await fetch(`${API_URL}/ordens-servico/${osId}/servicos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        servicoId: servicoId,
+                        quantidade: quantidade,
+                        valorTotal: quantidade * valorUnitario
+                    })
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
+                    document.getElementById('formServico').reset();
+                    carregarDetalhesOS();
+                    alert('Serviço atualizado com sucesso!');
+                } else {
+                    alert('Erro ao atualizar serviço');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        function editarProduto(produtoId, quantidade, valorUnitario) {
+            document.getElementById('produtoId').value = produtoId;
+            document.getElementById('quantidadeProduto').value = quantidade;
+            document.getElementById('valorUnitarioProduto').value = valorUnitario;
+            document.getElementById('produtoId').disabled = true;
+            
+            const modal = new bootstrap.Modal(document.getElementById('modalProduto'));
+            modal.show();
+            
+            const btnAdicionar = document.querySelector('#modalProduto .btn-primary');
+            btnAdicionar.textContent = 'Atualizar';
+            btnAdicionar.onclick = async function() {
+                await atualizarProduto(produtoId);
+                document.getElementById('produtoId').disabled = false;
+                btnAdicionar.textContent = 'Adicionar';
+                btnAdicionar.onclick = adicionarProduto;
+            };
+        }
+
+        async function atualizarProduto(produtoId) {
+            const quantidade = parseInt(document.getElementById('quantidadeProduto').value);
+            const valorUnitario = parseFloat(document.getElementById('valorUnitarioProduto').value);
+            
+            if (!quantidade || !valorUnitario) {
+                alert('Preencha todos os campos');
+                return;
+            }
+
+            try {
+                await fetch(`${API_URL}/ordens-servico/${osId}/produtos/${produtoId}`, { method: 'DELETE' });
+                
+                const response = await fetch(`${API_URL}/ordens-servico/${osId}/produtos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        produtoId: produtoId,
+                        quantidade: quantidade,
+                        valorTotal: quantidade * valorUnitario
+                    })
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalProduto')).hide();
+                    document.getElementById('formProduto').reset();
+                    carregarDetalhesOS();
+                    alert('Produto atualizado com sucesso!');
+                } else {
+                    alert('Erro ao atualizar produto');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        let osAtual = null;
+
+        function editarFormaPagamento() {
+            if (osAtual) {
+                document.getElementById('novaFormaPagamento').value = osAtual.formaPagamento || '';
+            }
+            const modal = new bootstrap.Modal(document.getElementById('modalFormaPagamento'));
+            modal.show();
+        }
+
+        async function salvarFormaPagamento() {
+            const novaFormaPagamento = document.getElementById('novaFormaPagamento').value.trim();
+            
+            if (!novaFormaPagamento) {
+                alert('Informe a forma de pagamento');
+                return;
+            }
+
+            // Como não temos endpoint específico para atualizar forma de pagamento,
+            // vou usar o endpoint de editar OS (que precisa ser criado)
+            alert('Funcionalidade de edição de forma de pagamento ainda não implementada no backend. Por favor, recrie a OS com a forma de pagamento correta.');
+            bootstrap.Modal.getInstance(document.getElementById('modalFormaPagamento')).hide();
+        }
+
+        // ========== FUNÇÕES DE PAGAMENTO ==========
+        
+        async function carregarPagamentosOS() {
+            try {
+                const response = await fetch(`${API_URL}/pagamentos`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const todosPagamentos = data.pagamentos || data;
+                    // Filtrar apenas pagamentos desta OS
+                    const pagamentosOS = todosPagamentos.filter(p => p.ordemServicoId === osId);
+                    exibirPagamentosOS(pagamentosOS);
+                    atualizarResumoPagamentos(pagamentosOS);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar pagamentos:', error);
+            }
+        }
+
+        function exibirPagamentosOS(pagamentos) {
+            const tbody = document.getElementById('tabelaPagamentosOS');
+            if (pagamentos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum pagamento adicionado</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = pagamentos.map(p => {
+                const statusClass = {
+                    'PENDENTE': 'warning',
+                    'PAGO': 'success',
+                    'CANCELADO': 'danger'
+                };
+                return `
+                    <tr>
+                        <td>${p.descricao || '-'}</td>
+                        <td>R$ ${(p.valor || 0).toFixed(2)}</td>
+                        <td><span class="badge bg-${statusClass[p.status] || 'secondary'}">${p.status || '-'}</span></td>
+                        <td>
+                            ${p.status === 'PENDENTE' ? `
+                                <button class="btn btn-sm btn-warning me-1" onclick="editarPagamento('${p.id}', ${p.valor}, '${(p.descricao || '').replace(/'/g, "\\'")}')">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-success me-1" onclick="confirmarPagamento('${p.id}')">
+                                    <i class="bi bi-check-circle"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deletarPagamento('${p.id}')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function atualizarResumoPagamentos(pagamentos) {
+            const totalPagamentos = pagamentos.reduce((sum, p) => sum + (p.valor || 0), 0);
+            const valorPago = pagamentos.filter(p => p.status === 'PAGO').reduce((sum, p) => sum + (p.valor || 0), 0);
+            const saldoPendente = pagamentos.filter(p => p.status === 'PENDENTE').reduce((sum, p) => sum + (p.valor || 0), 0);
+            
+            const totalOS = osAtual ? (osAtual.valorTotalFinal || 0) : 0;
+            const diferenca = totalOS - totalPagamentos;
+
+            document.getElementById('totalPagamentos').textContent = `R$ ${totalPagamentos.toFixed(2)}`;
+            document.getElementById('valorPago').textContent = `R$ ${valorPago.toFixed(2)}`;
+            document.getElementById('saldoPendente').textContent = `R$ ${saldoPendente.toFixed(2)}`;
+            
+            const elemDiferenca = document.getElementById('diferencaPagamento');
+            elemDiferenca.textContent = `R$ ${Math.abs(diferenca).toFixed(2)}`;
+            
+            if (diferenca > 0) {
+                elemDiferenca.className = 'fs-6 text-danger';
+            } else if (diferenca < 0) {
+                elemDiferenca.className = 'fs-6 text-warning';
+            } else {
+                elemDiferenca.className = 'fs-6 text-success';
+            }
+        }
+
+        async function adicionarPagamento() {
+            const valor = parseFloat(document.getElementById('valorPagamento').value);
+            const descricao = document.getElementById('descricaoPagamento').value.trim();
+
+            if (!valor || valor <= 0) {
+                alert('Informe um valor válido');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/pagamentos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ordemServicoId: osId,
+                        valor: valor,
+                        descricao: descricao || 'Pagamento OS'
+                    })
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalPagamento')).hide();
+                    document.getElementById('formPagamento').reset();
+                    await carregarPagamentosOS();
+                    alert('Pagamento adicionado com sucesso!');
+                } else {
+                    const erro = await response.text();
+                    alert('Erro ao adicionar pagamento: ' + erro);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        function editarPagamento(id, valor, descricao) {
+            document.getElementById('editarPagamentoId').value = id;
+            document.getElementById('editarValorPagamento').value = valor;
+            document.getElementById('editarDescricaoPagamento').value = descricao;
+            new bootstrap.Modal(document.getElementById('modalEditarPagamento')).show();
+        }
+
+        async function salvarEdicaoPagamento() {
+            const id = document.getElementById('editarPagamentoId').value;
+            const valor = parseFloat(document.getElementById('editarValorPagamento').value);
+            const descricao = document.getElementById('editarDescricaoPagamento').value.trim();
+
+            if (!valor || valor <= 0) {
+                alert('Informe um valor válido');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/pagamentos/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ valor, descricao })
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalEditarPagamento')).hide();
+                    await carregarPagamentosOS();
+                    alert('Pagamento atualizado com sucesso!');
+                } else {
+                    const erro = await response.text();
+                    alert('Erro ao atualizar pagamento: ' + erro);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        async function confirmarPagamento(id) {
+            if (!confirm('Confirmar o pagamento?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/pagamentos/${id}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'PAGO' })
+                });
+
+                if (response.ok) {
+                    await carregarPagamentosOS();
+                    alert('Pagamento confirmado!');
+                } else {
+                    alert('Erro ao confirmar pagamento');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        async function deletarPagamento(id) {
+            if (!confirm('Deseja realmente deletar este pagamento?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/pagamentos/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    await carregarPagamentosOS();
+                    alert('Pagamento deletado!');
+                } else {
+                    alert('Erro ao deletar pagamento');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        if (osId) {
+            carregarDetalhesOS();
+            carregarServicos();
+            carregarProdutos();
+        } else {
+            alert('ID da OS não informado');
+            window.location.href = 'ordens-servico.html';
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

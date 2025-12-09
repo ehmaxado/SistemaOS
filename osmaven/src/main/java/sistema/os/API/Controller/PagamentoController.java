@@ -1,17 +1,20 @@
 package sistema.os.API.Controller;
 
-import sistema.os.API.DTOs.Requests.CriarPagamentoRequest;
-import sistema.os.API.DTOs.Requests.EditarStatusPagamentoRequest;
-import sistema.os.API.DTOs.Responses.CriarPagamentoResponse;
-import sistema.os.API.DTOs.Responses.BuscarPagamentoResponse;
-import sistema.os.API.DTOs.Responses.EditarStatusPagamentoResponse;
-import sistema.os.API.DTOs.Responses.DeletarPagamentoResponse;
-import sistema.os.API.DTOs.Responses.ListarPagamentosResponse;
-import sistema.os.Application.UseCase.CriarPagamentoUseCase;
-import sistema.os.Application.UseCase.ListarPagamentosUseCase;
-import sistema.os.Application.UseCase.BuscarPagamentoPorIdUseCase;
-import sistema.os.Application.UseCase.DeletarPagamentoUseCase;
-import sistema.os.Application.UseCase.EditarStatusPagamentoUseCase;
+import sistema.os.API.DTOs.Requests.Pagamentos.CriarPagamentoRequest;
+import sistema.os.API.DTOs.Requests.Pagamentos.EditarPagamentoRequest;
+import sistema.os.API.DTOs.Requests.Pagamentos.EditarStatusPagamentoRequest;
+import sistema.os.API.DTOs.Responses.Pagamentos.BuscarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.CriarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.DeletarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.EditarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.EditarStatusPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.ListarPagamentosResponse;
+import sistema.os.Application.UseCase.Pagamentos.BuscarPagamentoPorIdUseCase;
+import sistema.os.Application.UseCase.Pagamentos.CriarPagamentoUseCase;
+import sistema.os.Application.UseCase.Pagamentos.DeletarPagamentoUseCase;
+import sistema.os.Application.UseCase.Pagamentos.EditarPagamentoUseCase;
+import sistema.os.Application.UseCase.Pagamentos.EditarStatusPagamentoUseCase;
+import sistema.os.Application.UseCase.Pagamentos.ListarPagamentosUseCase;
 
 public class PagamentoController {
     private final CriarPagamentoUseCase criarUseCase;
@@ -19,18 +22,21 @@ public class PagamentoController {
     private final BuscarPagamentoPorIdUseCase buscarPorIdUseCase;
     private final DeletarPagamentoUseCase deletarUseCase;
     private final EditarStatusPagamentoUseCase editarStatusUseCase;
+    private final EditarPagamentoUseCase editarPagamentoUseCase;
 
     public PagamentoController(
             CriarPagamentoUseCase criarUseCase,
             ListarPagamentosUseCase listarUseCase,
             BuscarPagamentoPorIdUseCase buscarPorIdUseCase,
             DeletarPagamentoUseCase deletarUseCase,
-            EditarStatusPagamentoUseCase editarStatusUseCase) {
+            EditarStatusPagamentoUseCase editarStatusUseCase,
+            EditarPagamentoUseCase editarPagamentoUseCase) {
         this.criarUseCase = criarUseCase;
         this.listarUseCase = listarUseCase;
         this.buscarPorIdUseCase = buscarPorIdUseCase;
         this.deletarUseCase = deletarUseCase;
         this.editarStatusUseCase = editarStatusUseCase;
+        this.editarPagamentoUseCase = editarPagamentoUseCase;
     }
 
     public CriarPagamentoResponse criar(CriarPagamentoRequest request) {
@@ -55,5 +61,9 @@ public class PagamentoController {
 
     public EditarStatusPagamentoResponse editarStatus(String id, EditarStatusPagamentoRequest request) {
         return editarStatusUseCase.executar(id, request);
+    }
+
+    public EditarPagamentoResponse editar(String id, EditarPagamentoRequest request) {
+        return editarPagamentoUseCase.executar(id, request);
     }
 }

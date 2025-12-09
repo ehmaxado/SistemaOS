@@ -1,4 +1,4 @@
-package sistema.os.API.DTOs.Requests;
+package sistema.os.API.DTOs.Requests.Pessoas;
 
 public class BuscarPessoaRequest {
     public String id;

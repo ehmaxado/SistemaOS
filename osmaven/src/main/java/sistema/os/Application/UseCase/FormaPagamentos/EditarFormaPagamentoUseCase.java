@@ -1,9 +1,9 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.FormaPagamentos;
 
 import java.util.UUID;
 
-import sistema.os.API.DTOs.Requests.EditarFormaPagamentoRequest;
-import sistema.os.API.DTOs.Responses.EditarFormaPagamentoResponse;
+import sistema.os.API.DTOs.Requests.FormaPagamentos.EditarFormaPagamentoRequest;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.EditarFormaPagamentoResponse;
 import sistema.os.domain.Entidades.FormaPagamento;
 import sistema.os.domain.Interfaces.IFormaPagamentoRepository;
 

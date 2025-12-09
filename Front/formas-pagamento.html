@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formas de Pagamento - Sistema OS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html"><i class="bi bi-tools"></i> Sistema OS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ordens-servico.html">Ordens de Serviço</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pessoas.html">Pessoas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="produtos.html">Produtos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="formas-pagamento.html">Formas de Pagamento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pagamentos.html">Pagamentos</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><span class="navbar-text me-3" id="nomeUsuario"></span></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-credit-card"></i> Formas de Pagamento</h2>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFormaPagamento" onclick="novaFormaPagamento()">
+                <i class="bi bi-plus-circle"></i> Nova Forma de Pagamento
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Ativa</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaFormasPagamento">
+                            <tr><td colspan="4" class="text-center">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Forma de Pagamento -->
+    <div class="modal fade" id="modalFormaPagamento" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFormaPagamentoTitle">Nova Forma de Pagamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formFormaPagamento">
+                        <input type="hidden" id="formaPagamentoId">
+                        <div class="mb-3">
+                            <label class="form-label">Nome *</label>
+                            <input type="text" class="form-control" id="nome" maxlength="100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea class="form-control" id="descricao" rows="3" maxlength="255"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ativa" checked>
+                                <label class="form-check-label" for="ativa">
+                                    Ativa
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarFormaPagamento()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+        if (!usuario.email) window.location.href = 'index.html';
+        document.getElementById('nomeUsuario').textContent = usuario.nome || usuario.email;
+
+        function logout() {
+            localStorage.removeItem('usuario');
+            window.location.href = 'index.html';
+        }
+
+        async function carregarFormasPagamento() {
+            try {
+                const response = await fetch(`${API_URL}/formas-pagamento`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const formas = data.formas || data;
+                    exibirFormasPagamento(formas);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar formas de pagamento:', error);
+                document.getElementById('tabelaFormasPagamento').innerHTML = 
+                    '<tr><td colspan="4" class="text-center text-danger">Erro ao carregar dados</td></tr>';
+            }
+        }
+
+        function exibirFormasPagamento(formas) {
+            const tbody = document.getElementById('tabelaFormasPagamento');
+            if (!formas || formas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhuma forma de pagamento cadastrada</td></tr>';
+                return;
+            }
+            tbody.innerHTML = formas.map(f => `
+                <tr>
+                    <td>${f.nome || '-'}</td>
+                    <td>${f.descricao || '-'}</td>
+                    <td><span class="badge bg-${f.ativo ? 'success' : 'secondary'}">${f.ativo ? 'Sim' : 'Não'}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1" onclick="editarFormaPagamento('${f.id}')" data-bs-toggle="modal" data-bs-target="#modalFormaPagamento">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deletarFormaPagamento('${f.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function novaFormaPagamento() {
+            document.getElementById('modalFormaPagamentoTitle').textContent = 'Nova Forma de Pagamento';
+            document.getElementById('formFormaPagamento').reset();
+            document.getElementById('formaPagamentoId').value = '';
+            document.getElementById('ativa').checked = true;
+        }
+
+        async function editarFormaPagamento(id) {
+            try {
+                const response = await fetch(`${API_URL}/formas-pagamento/${id}`);
+                if (response.ok) {
+                    const forma = await response.json();
+                    
+                    document.getElementById('modalFormaPagamentoTitle').textContent = 'Editar Forma de Pagamento';
+                    document.getElementById('formaPagamentoId').value = forma.id || '';
+                    document.getElementById('nome').value = forma.nome || '';
+                    document.getElementById('descricao').value = forma.descricao || '';
+                    document.getElementById('ativa').checked = forma.ativo !== false;
+                } else {
+                    alert('Erro ao buscar dados da forma de pagamento');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        async function salvarFormaPagamento() {
+            const nome = document.getElementById('nome').value.trim();
+            const descricao = document.getElementById('descricao').value.trim();
+            
+            if (!nome) {
+                alert('Nome é obrigatório');
+                document.getElementById('nome').focus();
+                return;
+            }
+
+            const formaPagamentoId = document.getElementById('formaPagamentoId').value;
+            const isEdicao = formaPagamentoId !== '';
+
+            const dados = {
+                nome: nome,
+                descricao: descricao
+            };
+
+            // Apenas para edição, envia o campo ativo
+            if (isEdicao) {
+                dados.ativo = document.getElementById('ativa').checked;
+            }
+
+            try {
+                const url = isEdicao ? `${API_URL}/formas-pagamento/${formaPagamentoId}` : `${API_URL}/formas-pagamento`;
+                const method = isEdicao ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalFormaPagamento')).hide();
+                    carregarFormasPagamento();
+                    alert(isEdicao ? 'Forma de pagamento atualizada com sucesso!' : 'Forma de pagamento criada com sucesso!');
+                } else {
+                    const error = await response.json();
+                    alert('Erro ao salvar forma de pagamento: ' + (error.mensagem || 'Erro desconhecido'));
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        async function deletarFormaPagamento(id) {
+            if (!confirm('Deseja realmente excluir esta forma de pagamento?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/formas-pagamento/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    carregarFormasPagamento();
+                    alert('Forma de pagamento excluída com sucesso!');
+                } else {
+                    alert('Erro ao excluir forma de pagamento');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        carregarFormasPagamento();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

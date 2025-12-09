@@ -1,8 +1,8 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.Pessoas;
 
 import java.util.UUID;
 
-import sistema.os.API.DTOs.Responses.BuscarPessoaResponse;
+import sistema.os.API.DTOs.Responses.Pessoas.BuscarPessoaResponse;
 import sistema.os.domain.Entidades.Pessoa;
 import sistema.os.domain.Interfaces.IPessoaRepository;
 
@@ -34,10 +34,16 @@ public class BuscaPessoaUseCase {
         return new BuscarPessoaResponse(
             pessoa.getId().toString(),
             pessoa.getNome(),
-            pessoa.getCpfCnpj().getValor(),
-            pessoa.getTelefone().getValor(),
-            pessoa.getTipo().name(),
-            pessoa.getStatus().name(),
+            pessoa.getCpfCnpj(),
+            pessoa.getTelefone(),
+            pessoa.getTipoPessoa(),
+            pessoa.getEmail(),
+            pessoa.getCep(),
+            pessoa.getLogradouro(),
+            pessoa.getNumero(),
+            pessoa.getBairro(),
+            pessoa.getCidade(),
+            pessoa.getUf(),
             pessoa.getDataCadastro()
         );
     }

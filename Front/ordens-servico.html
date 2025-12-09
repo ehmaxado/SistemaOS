@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordens de Serviço - Sistema OS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html"><i class="bi bi-tools"></i> Sistema OS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="ordens-servico.html">Ordens de Serviço</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pessoas.html">Pessoas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="produtos.html">Produtos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="formas-pagamento.html">Formas de Pagamento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pagamentos.html">Pagamentos</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><span class="navbar-text me-3" id="nomeUsuario"></span></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-file-earmark-text"></i> Ordens de Serviço</h2>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalOS" onclick="novaOS()">
+                <i class="bi bi-plus-circle"></i> Nova OS
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Número OS</th>
+                                <th>Cliente</th>
+                                <th>Data Abertura</th>
+                                <th>Status</th>
+                                <th>Valor Total</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaOS">
+                            <tr><td colspan="6" class="text-center">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal OS -->
+    <div class="modal fade" id="modalOS" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalOSTitle">Nova Ordem de Serviço</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" id="osTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="dados-tab" data-bs-toggle="tab" data-bs-target="#dados" type="button">
+                                <i class="bi bi-file-text"></i> Dados Básicos
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button">
+                                <i class="bi bi-box"></i> Produtos
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="servicos-tab" data-bs-toggle="tab" data-bs-target="#servicos" type="button">
+                                <i class="bi bi-wrench"></i> Serviços
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pagamentos-tab" data-bs-toggle="tab" data-bs-target="#pagamentos" type="button">
+                                <i class="bi bi-cash"></i> Pagamentos
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content mt-3" id="osTabContent">
+                        <!-- Aba Dados Básicos -->
+                        <div class="tab-pane fade show active" id="dados">
+                            <form id="formOS">
+                                <input type="hidden" id="osId">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Cliente *</label>
+                                        <select class="form-select" id="clienteId" required>
+                                            <option value="">Selecione...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Técnico *</label>
+                                        <select class="form-select" id="tecnicoId" required>
+                                            <option value="">Selecione...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Equipamento *</label>
+                                        <input type="text" class="form-control" id="equipamento" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Defeito Informado *</label>
+                                        <input type="text" class="form-control" id="defeitoInformado" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Observações</label>
+                                    <textarea class="form-control" id="observacoes" rows="3"></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Desconto (%)</label>
+                                        <input type="number" class="form-control" id="descontoPercentual" value="0" step="0.01">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Valor Desconto (R$)</label>
+                                        <input type="number" class="form-control" id="descontoValor" value="0" step="0.01">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Valor Adicional</label>
+                                        <input type="number" class="form-control" id="valorAdicional" value="0" step="0.01">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Aba Produtos -->
+                        <div class="tab-pane fade" id="produtos">
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Produto</label>
+                                        <select class="form-select" id="produtoSelect">
+                                            <option value="">Selecione um produto...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Quantidade</label>
+                                        <input type="number" class="form-control" id="produtoQtd" min="1" value="1">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="button" class="btn btn-primary w-100" onclick="adicionarProduto()">
+                                            <i class="bi bi-plus-circle"></i> Adicionar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th>Qtd</th>
+                                            <th>Valor Unit.</th>
+                                            <th>Subtotal</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaProdutosOS"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Aba Serviços -->
+                        <div class="tab-pane fade" id="servicos">
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Serviço</label>
+                                        <select class="form-select" id="servicoSelect">
+                                            <option value="">Selecione um serviço...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Quantidade</label>
+                                        <input type="number" class="form-control" id="servicoQtd" min="1" value="1">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="button" class="btn btn-primary w-100" onclick="adicionarServico()">
+                                            <i class="bi bi-plus-circle"></i> Adicionar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Serviço</th>
+                                            <th>Qtd</th>
+                                            <th>Valor Unit.</th>
+                                            <th>Subtotal</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaServicosOS"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Aba Pagamentos -->
+                        <div class="tab-pane fade" id="pagamentos">
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Forma de Pagamento</label>
+                                        <select class="form-select" id="formaPagamentoSelect">
+                                            <option value="">Selecione...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Valor</label>
+                                        <input type="number" class="form-control" id="pagamentoValor" step="0.01" min="0">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Vencimento</label>
+                                        <input type="date" class="form-control" id="pagamentoVencimento">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="button" class="btn btn-primary w-100" onclick="adicionarPagamento()">
+                                            <i class="bi bi-plus-circle"></i> Adicionar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Forma Pagamento</th>
+                                            <th>Valor</th>
+                                            <th>Vencimento</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaPagamentosOS"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Produtos:</strong> <span id="totalProdutos">R$ 0,00</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Serviços:</strong> <span id="totalServicos">R$ 0,00</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Descontos:</strong> <span id="totalDescontos">R$ 0,00</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong class="text-primary">TOTAL:</strong> <span id="totalGeral" class="text-primary fw-bold">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarOS()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+        if (!usuario.email) window.location.href = 'index.html';
+        document.getElementById('nomeUsuario').textContent = usuario.nome || usuario.email;
+
+        let produtosDisponiveis = [];
+        let servicosDisponiveis = [];
+        let formasPagamento = [];
+        let produtosOS = [];
+        let servicosOS = [];
+        let pagamentosOS = [];
+
+        function logout() {
+            localStorage.removeItem('usuario');
+            window.location.href = 'index.html';
+        }
+
+        async function carregarOS() {
+            try {
+                console.log('Carregando OS de:', `${API_URL}/ordens-servico`);
+                const response = await fetch(`${API_URL}/ordens-servico`);
+                console.log('Response status:', response.status, response.ok);
+                if (response.ok) {
+                    const ordens = await response.json();
+                    console.log('Ordens recebidas:', ordens);
+                    exibirOS(ordens);
+                } else {
+                    console.error('Erro na resposta:', response.status, response.statusText);
+                    const errorText = await response.text();
+                    console.error('Detalhes do erro:', errorText);
+                    document.getElementById('tabelaOS').innerHTML = 
+                        `<tr><td colspan="6" class="text-center text-danger">Erro ao carregar dados: ${response.status}</td></tr>`;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar OS:', error);
+                document.getElementById('tabelaOS').innerHTML = 
+                    '<tr><td colspan="6" class="text-center text-danger">Erro ao carregar dados</td></tr>';
+            }
+        }
+
+        function exibirOS(ordens) {
+            const tbody = document.getElementById('tabelaOS');
+            if (!ordens || ordens.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhuma OS cadastrada</td></tr>';
+                return;
+            }
+            tbody.innerHTML = ordens.map(os => {
+                const status = os.dataFechamento ? 'CONCLUÍDA' : 'ABERTA';
+                const statusClass = os.dataFechamento ? 'bg-success' : 'bg-info';
+                return `
+                <tr>
+                    <td>${os.numeroOS || '-'}</td>
+                    <td>${os.clienteId || '-'}</td>
+                    <td>${os.dataAbertura ? new Date(os.dataAbertura).toLocaleDateString() : '-'}</td>
+                    <td><span class="badge ${statusClass}">${status}</span></td>
+                    <td>R$ ${(os.valorTotalFinal || 0).toFixed(2)}</td>
+                    <td>
+                        <a href="ordem-servico-detalhes.html?id=${os.id}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <button class="btn btn-sm btn-danger" onclick="deletarOS('${os.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        async function novaOS() {
+            document.getElementById('modalOSTitle').textContent = 'Nova Ordem de Serviço';
+            document.getElementById('formOS').reset();
+            document.getElementById('osId').value = '';
+            produtosOS = [];
+            servicosOS = [];
+            pagamentosOS = [];
+            
+            await Promise.all([
+                carregarPessoas(),
+                carregarProdutos(),
+                carregarServicos(),
+                carregarFormasPagamento()
+            ]);
+            
+            atualizarTabelaProdutos();
+            atualizarTabelaServicos();
+            atualizarTabelaPagamentos();
+            calcularTotais();
+        }
+
+        async function carregarPessoas() {
+            try {
+                const response = await fetch(`${API_URL}/pessoas`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const pessoas = data.pessoas || data;
+                    
+                    const clientes = pessoas.filter(p => p.tipoPessoa === 'CLIENTE');
+                    const tecnicos = pessoas.filter(p => p.tipoPessoa === 'FUNCIONARIO');
+                    
+                    const selectCliente = document.getElementById('clienteId');
+                    const selectTecnico = document.getElementById('tecnicoId');
+                    
+                    selectCliente.innerHTML = '<option value="">Selecione...</option>' +
+                        clientes.map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+                    
+                    selectTecnico.innerHTML = '<option value="">Selecione...</option>' +
+                        tecnicos.map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar pessoas:', error);
+            }
+        }
+
+        async function carregarProdutos() {
+            try {
+                const response = await fetch(`${API_URL}/produtos`);
+                if (response.ok) {
+                    const data = await response.json();
+                    produtosDisponiveis = data.produtos || data;
+                    
+                    const select = document.getElementById('produtoSelect');
+                    select.innerHTML = '<option value="">Selecione um produto...</option>' +
+                        produtosDisponiveis.filter(p => p.ativo).map(p => 
+                            `<option value="${p.id}" data-valor="${p.valorVenda}">${p.nome} - R$ ${p.valorVenda.toFixed(2)}</option>`
+                        ).join('');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar produtos:', error);
+            }
+        }
+
+        async function carregarServicos() {
+            try {
+                const response = await fetch(`${API_URL}/servicos`);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Resposta API servicos:', data);
+                    servicosDisponiveis = Array.isArray(data) ? data : [];
+                    
+                    const select = document.getElementById('servicoSelect');
+                    const servicosAtivos = servicosDisponiveis.filter(s => s.ativo);
+                    console.log('Serviços ativos:', servicosAtivos);
+                    
+                    select.innerHTML = '<option value="">Selecione um serviço...</option>' +
+                        servicosAtivos.map(s => 
+                            `<option value="${s.id}" data-valor="${s.valorPadrao}">${s.descricao} - R$ ${s.valorPadrao.toFixed(2)}</option>`
+                        ).join('');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar serviços:', error);
+            }
+        }
+
+        async function carregarFormasPagamento() {
+            try {
+                const response = await fetch(`${API_URL}/formas-pagamento`);
+                if (response.ok) {
+                    const data = await response.json();
+                    formasPagamento = data.formas || data;
+                    
+                    const select = document.getElementById('formaPagamentoSelect');
+                    select.innerHTML = '<option value="">Selecione...</option>' +
+                        formasPagamento.filter(f => f.ativo).map(f => 
+                            `<option value="${f.id}">${f.nome || f.descricao}</option>`
+                        ).join('');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar formas de pagamento:', error);
+            }
+        }
+
+        function adicionarProduto() {
+            const select = document.getElementById('produtoSelect');
+            const qtd = parseInt(document.getElementById('produtoQtd').value) || 1;
+            
+            if (!select.value) {
+                alert('Selecione um produto');
+                return;
+            }
+            
+            const produto = produtosDisponiveis.find(p => p.id == select.value);
+            const valorUnit = parseFloat(select.options[select.selectedIndex].dataset.valor);
+            
+            produtosOS.push({
+                produtoId: produto.id,
+                nome: produto.nome,
+                quantidade: qtd,
+                valorUnitario: valorUnit,
+                subtotal: qtd * valorUnit
+            });
+            
+            atualizarTabelaProdutos();
+            calcularTotais();
+            
+            select.value = '';
+            document.getElementById('produtoQtd').value = 1;
+        }
+
+        function removerProduto(index) {
+            produtosOS.splice(index, 1);
+            atualizarTabelaProdutos();
+            calcularTotais();
+        }
+
+        function atualizarTabelaProdutos() {
+            const tbody = document.getElementById('tabelaProdutosOS');
+            if (produtosOS.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum produto adicionado</td></tr>';
+                return;
+            }
+            tbody.innerHTML = produtosOS.map((p, i) => `
+                <tr>
+                    <td>${p.nome}</td>
+                    <td>${p.quantidade}</td>
+                    <td>R$ ${p.valorUnitario.toFixed(2)}</td>
+                    <td>R$ ${p.subtotal.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="removerProduto(${i})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function adicionarServico() {
+            const select = document.getElementById('servicoSelect');
+            const qtd = parseInt(document.getElementById('servicoQtd').value) || 1;
+            
+            if (!select.value) {
+                alert('Selecione um serviço');
+                return;
+            }
+            
+            const servico = servicosDisponiveis.find(s => s.id == select.value);
+            const valorUnit = parseFloat(select.options[select.selectedIndex].dataset.valor);
+            
+            servicosOS.push({
+                servicoId: servico.id,
+                descricao: servico.descricao,
+                quantidade: qtd,
+                valorUnitario: valorUnit,
+                subtotal: qtd * valorUnit
+            });
+            
+            atualizarTabelaServicos();
+            calcularTotais();
+            
+            select.value = '';
+            document.getElementById('servicoQtd').value = 1;
+        }
+
+        function removerServico(index) {
+            servicosOS.splice(index, 1);
+            atualizarTabelaServicos();
+            calcularTotais();
+        }
+
+        function atualizarTabelaServicos() {
+            const tbody = document.getElementById('tabelaServicosOS');
+            if (servicosOS.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum serviço adicionado</td></tr>';
+                return;
+            }
+            tbody.innerHTML = servicosOS.map((s, i) => `
+                <tr>
+                    <td>${s.descricao}</td>
+                    <td>${s.quantidade}</td>
+                    <td>R$ ${s.valorUnitario.toFixed(2)}</td>
+                    <td>R$ ${s.subtotal.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="removerServico(${i})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function adicionarPagamento() {
+            const select = document.getElementById('formaPagamentoSelect');
+            const valor = parseFloat(document.getElementById('pagamentoValor').value) || 0;
+            const vencimento = document.getElementById('pagamentoVencimento').value;
+            
+            if (!select.value) {
+                alert('Selecione uma forma de pagamento');
+                return;
+            }
+            
+            if (valor <= 0) {
+                alert('Informe um valor válido');
+                return;
+            }
+            
+            const forma = formasPagamento.find(f => f.id == select.value);
+            
+            pagamentosOS.push({
+                formaPagamentoId: forma.id,
+                descricao: forma.descricao,
+                valor: valor,
+                dataVencimento: vencimento,
+                status: 'PENDENTE'
+            });
+            
+            atualizarTabelaPagamentos();
+            
+            select.value = '';
+            document.getElementById('pagamentoValor').value = '';
+            document.getElementById('pagamentoVencimento').value = '';
+        }
+
+        function removerPagamento(index) {
+            pagamentosOS.splice(index, 1);
+            atualizarTabelaPagamentos();
+        }
+
+        function atualizarTabelaPagamentos() {
+            const tbody = document.getElementById('tabelaPagamentosOS');
+            if (pagamentosOS.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum pagamento adicionado</td></tr>';
+                return;
+            }
+            tbody.innerHTML = pagamentosOS.map((p, i) => `
+                <tr>
+                    <td>${p.descricao}</td>
+                    <td>R$ ${p.valor.toFixed(2)}</td>
+                    <td>${p.dataVencimento ? new Date(p.dataVencimento).toLocaleDateString('pt-BR') : '-'}</td>
+                    <td><span class="badge bg-warning">${p.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="removerPagamento(${i})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function calcularTotais() {
+            const totalProd = produtosOS.reduce((sum, p) => sum + p.subtotal, 0);
+            const totalServ = servicosOS.reduce((sum, s) => sum + s.subtotal, 0);
+            
+            const descontoPerc = parseFloat(document.getElementById('descontoPercentual').value) || 0;
+            const descontoVal = parseFloat(document.getElementById('descontoValor').value) || 0;
+            const adicional = parseFloat(document.getElementById('valorAdicional').value) || 0;
+            
+            const subtotal = totalProd + totalServ;
+            const descTotal = (subtotal * descontoPerc / 100) + descontoVal;
+            const total = subtotal - descTotal + adicional;
+            
+            document.getElementById('totalProdutos').textContent = `R$ ${totalProd.toFixed(2)}`;
+            document.getElementById('totalServicos').textContent = `R$ ${totalServ.toFixed(2)}`;
+            document.getElementById('totalDescontos').textContent = `R$ ${descTotal.toFixed(2)}`;
+            document.getElementById('totalGeral').textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        async function salvarOS() {
+            const clienteId = document.getElementById('clienteId').value;
+            const tecnicoId = document.getElementById('tecnicoId').value;
+            const equipamento = document.getElementById('equipamento').value;
+            const defeitoInformado = document.getElementById('defeitoInformado').value;
+            
+            console.log('Salvando OS - valores:', { clienteId, tecnicoId, equipamento, defeitoInformado });
+            
+            if (!clienteId || !tecnicoId || !equipamento || !defeitoInformado) {
+                alert('Preencha todos os campos obrigatórios');
+                return;
+            }
+
+            const dados = {
+                numeroOS: 'OS-' + Date.now(),
+                id_usuario: tecnicoId, // ID do técnico selecionado (pessoa)
+                clienteId: clienteId,
+                formaPagamento: '',
+                observacaoGeral: document.getElementById('observacoes').value || ''
+            };
+
+            console.log('Dados da OS a ser criada:', dados);
+            console.log('Produtos a adicionar:', produtosOS);
+            console.log('Serviços a adicionar:', servicosOS);
+
+            try {
+                // 1. Criar a OS
+                console.log('Criando OS...');
+                const response = await fetch(`${API_URL}/ordens-servico`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    const erro = await response.text();
+                    console.error('Erro ao criar OS:', erro);
+                    alert('Erro ao criar OS: ' + erro);
+                    return;
+                }
+
+                const osResponse = await response.json();
+                const osId = osResponse.id;
+                console.log('OS criada com ID:', osId);
+
+                // 2. Adicionar produtos
+                console.log('Adicionando produtos...');
+                for (const produto of produtosOS) {
+                    const produtoRequest = {
+                        produtoId: produto.produtoId,
+                        quantidade: produto.quantidade,
+                        valorTotal: produto.subtotal
+                    };
+                    console.log('Adicionando produto:', produtoRequest);
+                    
+                    const respProduto = await fetch(`${API_URL}/ordens-servico/${osId}/produtos`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(produtoRequest)
+                    });
+                    
+                    if (!respProduto.ok) {
+                        console.error('Erro ao adicionar produto:', await respProduto.text());
+                    }
+                }
+
+                // 3. Adicionar serviços
+                console.log('Adicionando serviços...');
+                for (const servico of servicosOS) {
+                    const servicoRequest = {
+                        servicoId: servico.servicoId,
+                        quantidade: servico.quantidade,
+                        valorTotal: servico.subtotal
+                    };
+                    console.log('Adicionando serviço:', servicoRequest);
+                    
+                    const respServico = await fetch(`${API_URL}/ordens-servico/${osId}/servicos`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(servicoRequest)
+                    });
+                    
+                    if (!respServico.ok) {
+                        console.error('Erro ao adicionar serviço:', await respServico.text());
+                    }
+                }
+
+                // 4. Adicionar pagamentos
+                console.log('Adicionando pagamentos...');
+                for (const pagamento of pagamentosOS) {
+                    const pagamentoRequest = {
+                        ordemServicoId: osId,
+                        valor: pagamento.valor,
+                        descricao: `${pagamento.descricao}${pagamento.dataVencimento ? ' - Venc: ' + new Date(pagamento.dataVencimento).toLocaleDateString('pt-BR') : ''}`
+                    };
+                    console.log('Adicionando pagamento:', pagamentoRequest);
+                    
+                    const respPagamento = await fetch(`${API_URL}/pagamentos`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(pagamentoRequest)
+                    });
+                    
+                    if (!respPagamento.ok) {
+                        console.error('Erro ao adicionar pagamento:', await respPagamento.text());
+                    }
+                }
+
+                console.log('OS criada com sucesso!');
+                bootstrap.Modal.getInstance(document.getElementById('modalOS')).hide();
+                carregarOS();
+                alert('OS criada com sucesso!');
+            } catch (error) {
+                console.error('Erro completo:', error);
+                alert('Erro ao conectar com o servidor: ' + error.message);
+            }
+        }
+
+        async function deletarOS(id) {
+            if (!confirm('Deseja realmente excluir esta OS?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/ordens-servico/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    carregarOS();
+                    alert('OS excluída com sucesso!');
+                } else {
+                    alert('Erro ao excluir OS');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        document.getElementById('descontoPercentual').addEventListener('input', calcularTotais);
+        document.getElementById('descontoValor').addEventListener('input', calcularTotais);
+        document.getElementById('valorAdicional').addEventListener('input', calcularTotais);
+
+        carregarOS();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

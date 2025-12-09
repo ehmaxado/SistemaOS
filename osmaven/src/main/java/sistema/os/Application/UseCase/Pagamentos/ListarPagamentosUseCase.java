@@ -1,10 +1,10 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.Pagamentos;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import sistema.os.API.DTOs.Responses.BuscarPagamentoResponse;
-import sistema.os.API.DTOs.Responses.ListarPagamentosResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.BuscarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.ListarPagamentosResponse;
 import sistema.os.domain.Entidades.Pagamento;
 import sistema.os.domain.Enums.StatusPagamento;
 import sistema.os.domain.Interfaces.IPagamentoRepository;

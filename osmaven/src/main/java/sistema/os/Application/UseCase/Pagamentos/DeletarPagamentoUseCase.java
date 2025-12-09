@@ -1,8 +1,8 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.Pagamentos;
 
 import java.util.UUID;
 
-import sistema.os.API.DTOs.Responses.DeletarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.DeletarPagamentoResponse;
 import sistema.os.domain.Interfaces.IPagamentoRepository;
 
 public class DeletarPagamentoUseCase {

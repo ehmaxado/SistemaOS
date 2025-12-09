@@ -1,7 +1,7 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.FormaPagamentos;
 
-import sistema.os.API.DTOs.Requests.CriarFormaPagamentoRequest;
-import sistema.os.API.DTOs.Responses.CriarFormaPagamentoResponse;
+import sistema.os.API.DTOs.Requests.FormaPagamentos.CriarFormaPagamentoRequest;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.CriarFormaPagamentoResponse;
 import sistema.os.domain.Entidades.FormaPagamento;
 import sistema.os.domain.Interfaces.IFormaPagamentoRepository;
 

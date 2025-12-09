@@ -1,4 +1,4 @@
-package sistema.os.API.DTOs.Requests;
+package sistema.os.API.DTOs.Requests.Pagamentos;
 
 public class EditarStatusPagamentoRequest {
     public String status;

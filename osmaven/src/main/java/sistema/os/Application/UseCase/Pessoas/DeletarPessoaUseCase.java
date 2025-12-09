@@ -1,8 +1,8 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.Pessoas;
 
 import java.util.UUID;
 
-import sistema.os.API.DTOs.Responses.DeletarPessoaResponse;
+import sistema.os.API.DTOs.Responses.Pessoas.DeletarPessoaResponse;
 import sistema.os.domain.Interfaces.IPessoaRepository;
 
 public class DeletarPessoaUseCase {

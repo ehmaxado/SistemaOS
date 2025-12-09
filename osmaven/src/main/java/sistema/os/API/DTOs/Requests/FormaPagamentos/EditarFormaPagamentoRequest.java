@@ -1,4 +1,4 @@
-package sistema.os.API.DTOs.Requests;
+package sistema.os.API.DTOs.Requests.FormaPagamentos;
 
 public class EditarFormaPagamentoRequest {
     public String nome;

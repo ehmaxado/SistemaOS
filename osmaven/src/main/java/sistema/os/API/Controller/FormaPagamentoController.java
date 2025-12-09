@@ -1,17 +1,17 @@
 package sistema.os.API.Controller;
 
-import sistema.os.API.DTOs.Requests.CriarFormaPagamentoRequest;
-import sistema.os.API.DTOs.Requests.EditarFormaPagamentoRequest;
-import sistema.os.API.DTOs.Responses.CriarFormaPagamentoResponse;
-import sistema.os.API.DTOs.Responses.BuscarFormaPagamentoResponse;
-import sistema.os.API.DTOs.Responses.EditarFormaPagamentoResponse;
-import sistema.os.API.DTOs.Responses.DeletarFormaPagamentoResponse;
-import sistema.os.API.DTOs.Responses.ListarFormasPagamentoResponse;
-import sistema.os.Application.UseCase.CriarFormaPagamentoUseCase;
-import sistema.os.Application.UseCase.ListarFormasPagamentoUseCase;
-import sistema.os.Application.UseCase.BuscarFormaPagamentoPorIdUseCase;
-import sistema.os.Application.UseCase.DeletarFormaPagamentoUseCase;
-import sistema.os.Application.UseCase.EditarFormaPagamentoUseCase;
+import sistema.os.API.DTOs.Requests.FormaPagamentos.CriarFormaPagamentoRequest;
+import sistema.os.API.DTOs.Requests.FormaPagamentos.EditarFormaPagamentoRequest;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.BuscarFormaPagamentoResponse;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.CriarFormaPagamentoResponse;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.DeletarFormaPagamentoResponse;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.EditarFormaPagamentoResponse;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.ListarFormasPagamentoResponse;
+import sistema.os.Application.UseCase.FormaPagamentos.BuscarFormaPagamentoPorIdUseCase;
+import sistema.os.Application.UseCase.FormaPagamentos.CriarFormaPagamentoUseCase;
+import sistema.os.Application.UseCase.FormaPagamentos.DeletarFormaPagamentoUseCase;
+import sistema.os.Application.UseCase.FormaPagamentos.EditarFormaPagamentoUseCase;
+import sistema.os.Application.UseCase.FormaPagamentos.ListarFormasPagamentoUseCase;
 
 public class FormaPagamentoController {
     private final CriarFormaPagamentoUseCase criarUseCase;

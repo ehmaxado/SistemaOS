@@ -2,19 +2,22 @@ package sistema.os.API.Routes;
 
 import io.javalin.Javalin;
 import sistema.os.API.Controller.PagamentoController;
-import sistema.os.API.DTOs.Requests.CriarPagamentoRequest;
-import sistema.os.API.DTOs.Requests.EditarStatusPagamentoRequest;
-import sistema.os.API.DTOs.Responses.CriarPagamentoResponse;
-import sistema.os.API.DTOs.Responses.BuscarPagamentoResponse;
-import sistema.os.API.DTOs.Responses.EditarStatusPagamentoResponse;
-import sistema.os.API.DTOs.Responses.DeletarPagamentoResponse;
-import sistema.os.API.DTOs.Responses.ListarPagamentosResponse;
+import sistema.os.API.DTOs.Requests.Pagamentos.CriarPagamentoRequest;
+import sistema.os.API.DTOs.Requests.Pagamentos.EditarPagamentoRequest;
+import sistema.os.API.DTOs.Requests.Pagamentos.EditarStatusPagamentoRequest;
+import sistema.os.API.DTOs.Responses.Pagamentos.BuscarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.CriarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.DeletarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.EditarPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.EditarStatusPagamentoResponse;
+import sistema.os.API.DTOs.Responses.Pagamentos.ListarPagamentosResponse;
 import sistema.os.API.DTOs.Responses.ErroResponse;
-import sistema.os.Application.UseCase.CriarPagamentoUseCase;
-import sistema.os.Application.UseCase.ListarPagamentosUseCase;
-import sistema.os.Application.UseCase.BuscarPagamentoPorIdUseCase;
-import sistema.os.Application.UseCase.DeletarPagamentoUseCase;
-import sistema.os.Application.UseCase.EditarStatusPagamentoUseCase;
+import sistema.os.Application.UseCase.Pagamentos.BuscarPagamentoPorIdUseCase;
+import sistema.os.Application.UseCase.Pagamentos.CriarPagamentoUseCase;
+import sistema.os.Application.UseCase.Pagamentos.DeletarPagamentoUseCase;
+import sistema.os.Application.UseCase.Pagamentos.EditarPagamentoUseCase;
+import sistema.os.Application.UseCase.Pagamentos.EditarStatusPagamentoUseCase;
+import sistema.os.Application.UseCase.Pagamentos.ListarPagamentosUseCase;
 import sistema.os.Infraestrutura.persistence.repository.PagamentoRepository;
 import sistema.os.domain.Interfaces.IPagamentoRepository;
 
@@ -28,7 +31,8 @@ public class PagamentoRoutes {
         var buscarPorIdUseCase = new BuscarPagamentoPorIdUseCase(repository);
         var deletarUseCase = new DeletarPagamentoUseCase(repository);
         var editarStatusUseCase = new EditarStatusPagamentoUseCase(repository);
-        this.controller = new PagamentoController(criarUseCase, listarUseCase, buscarPorIdUseCase, deletarUseCase, editarStatusUseCase);
+        var editarPagamentoUseCase = new EditarPagamentoUseCase(repository);
+        this.controller = new PagamentoController(criarUseCase, listarUseCase, buscarPorIdUseCase, deletarUseCase, editarStatusUseCase, editarPagamentoUseCase);
     }
 
     public void register(Javalin app) {
@@ -100,6 +104,20 @@ public class PagamentoRoutes {
                 ctx.status(400).json(new ErroResponse("VALIDACAO", e.getMessage()));
             } catch (Exception e) {
                 ctx.status(500).json(new ErroResponse("ERRO", "Erro ao deletar pagamento"));
+            }
+        });
+
+        app.put("/api/pagamentos/{id}", ctx -> {
+            try {
+                String id = ctx.pathParam("id");
+                EditarPagamentoRequest request = ctx.bodyAsClass(EditarPagamentoRequest.class);
+                EditarPagamentoResponse response = controller.editar(id, request);
+                ctx.status(200).json(response);
+
+            } catch (IllegalArgumentException e) {
+                ctx.status(400).json(new ErroResponse("VALIDACAO", e.getMessage()));
+            } catch (Exception e) {
+                ctx.status(500).json(new ErroResponse("ERRO", "Erro ao editar pagamento"));
             }
         });
     }

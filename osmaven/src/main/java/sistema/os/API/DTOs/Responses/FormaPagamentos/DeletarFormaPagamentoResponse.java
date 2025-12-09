@@ -1,4 +1,4 @@
-package sistema.os.API.DTOs.Responses;
+package sistema.os.API.DTOs.Responses.FormaPagamentos;
 
 public class DeletarFormaPagamentoResponse {
     public String id;

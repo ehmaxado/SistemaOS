@@ -1,10 +1,10 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.FormaPagamentos;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import sistema.os.API.DTOs.Responses.BuscarFormaPagamentoResponse;
-import sistema.os.API.DTOs.Responses.ListarFormasPagamentoResponse;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.BuscarFormaPagamentoResponse;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.ListarFormasPagamentoResponse;
 import sistema.os.domain.Entidades.FormaPagamento;
 import sistema.os.domain.Interfaces.IFormaPagamentoRepository;
 

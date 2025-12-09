@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamentos - Sistema OS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html"><i class="bi bi-tools"></i> Sistema OS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ordens-servico.html">Ordens de Serviço</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pessoas.html">Pessoas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="produtos.html">Produtos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="formas-pagamento.html">Formas de Pagamento</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="pagamentos.html">Pagamentos</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><span class="navbar-text me-3" id="nomeUsuario"></span></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-cash-stack"></i> Pagamentos</h2>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" id="filtroStatus" onchange="aplicarFiltros()">
+                            <option value="">Todos</option>
+                            <option value="PENDENTE">Pendente</option>
+                            <option value="PAGO">Pago</option>
+                            <option value="CANCELADO">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Ordem de Serviço</label>
+                        <input type="text" class="form-control" id="filtroOS" placeholder="Número da OS" onkeyup="aplicarFiltros()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>OS</th>
+                                <th>Forma de Pagamento</th>
+                                <th>Valor</th>
+                                <th>Data Vencimento</th>
+                                <th>Data Pagamento</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaPagamentos">
+                            <tr><td colspan="7" class="text-center">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div class="modal fade" id="modalEditarPagamento" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Pagamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarPagamento">
+                        <input type="hidden" id="editarPagamentoId">
+                        <div class="mb-3">
+                            <label for="editarValor" class="form-label">Valor *</label>
+                            <input type="number" class="form-control" id="editarValor" step="0.01" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarDescricao" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="editarDescricao" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarEdicaoPagamento()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+        if (!usuario.email) window.location.href = 'index.html';
+        document.getElementById('nomeUsuario').textContent = usuario.nome || usuario.email;
+
+        let todosPagamentos = [];
+
+        function logout() {
+            localStorage.removeItem('usuario');
+            window.location.href = 'index.html';
+        }
+
+        async function carregarPagamentos() {
+            try {
+                console.log('Carregando pagamentos de:', `${API_URL}/pagamentos`);
+                const response = await fetch(`${API_URL}/pagamentos`);
+                console.log('Response status:', response.status, response.ok);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Pagamentos recebidos:', data);
+                    // A API retorna {pagamentos: Array, total: number} ou apenas Array
+                    todosPagamentos = data.pagamentos || data;
+                    aplicarFiltros();
+                } else {
+                    console.error('Erro na resposta:', response.status, response.statusText);
+                    const errorText = await response.text();
+                    console.error('Detalhes do erro:', errorText);
+                    document.getElementById('tabelaPagamentos').innerHTML = 
+                        `<tr><td colspan="7" class="text-center text-danger">Erro ao carregar dados: ${response.status}</td></tr>`;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar pagamentos:', error);
+                document.getElementById('tabelaPagamentos').innerHTML = 
+                    '<tr><td colspan="7" class="text-center text-danger">Erro ao carregar dados</td></tr>';
+            }
+        }
+
+        function aplicarFiltros() {
+            const filtroStatus = document.getElementById('filtroStatus').value.toUpperCase();
+            const filtroOS = document.getElementById('filtroOS').value.toLowerCase();
+
+            const pagamentosFiltrados = todosPagamentos.filter(p => {
+                const matchStatus = !filtroStatus || p.status === filtroStatus;
+                const matchOS = !filtroOS || (p.ordemServicoId && p.ordemServicoId.toLowerCase().includes(filtroOS));
+                return matchStatus && matchOS;
+            });
+
+            exibirPagamentos(pagamentosFiltrados);
+        }
+
+        function exibirPagamentos(pagamentos) {
+            const tbody = document.getElementById('tabelaPagamentos');
+            if (!pagamentos || pagamentos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">Nenhum pagamento encontrado</td></tr>';
+                return;
+            }
+            tbody.innerHTML = pagamentos.map(p => {
+                const statusClass = {
+                    'PENDENTE': 'warning',
+                    'PAGO': 'success',
+                    'CANCELADO': 'danger'
+                };
+                return `
+                <tr>
+                    <td>${p.ordemServicoId || '-'}</td>
+                    <td>${p.formaPagamentoDescricao || '-'}</td>
+                    <td>R$ ${(p.valor || 0).toFixed(2)}</td>
+                    <td>${p.dataVencimento ? new Date(p.dataVencimento).toLocaleDateString('pt-BR') : '-'}</td>
+                    <td>${p.dataPagamento ? new Date(p.dataPagamento).toLocaleDateString('pt-BR') : '-'}</td>
+                    <td><span class="badge bg-${statusClass[p.status] || 'secondary'}">${p.status || '-'}</span></td>
+                    <td>
+                        ${p.status === 'PENDENTE' ? `
+                            <button class="btn btn-sm btn-primary me-1" onclick="abrirModalEditar('${p.id}', ${p.valor}, '${p.descricao || ''}')">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success me-1" onclick="confirmarPagamento('${p.id}')">
+                                <i class="bi bi-check-circle"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="cancelarPagamento('${p.id}')">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `}).join('');
+        }
+
+        async function confirmarPagamento(id) {
+            if (!confirm('Confirmar pagamento?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/pagamentos/${id}/pagar`, { 
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    carregarPagamentos();
+                    alert('Pagamento confirmado com sucesso!');
+                } else {
+                    alert('Erro ao confirmar pagamento');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        async function cancelarPagamento(id) {
+            if (!confirm('Deseja realmente cancelar este pagamento?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/pagamentos/${id}/cancelar`, { 
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    carregarPagamentos();
+                    alert('Pagamento cancelado!');
+                } else {
+                    alert('Erro ao cancelar pagamento');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        function abrirModalEditar(id, valor, descricao) {
+            document.getElementById('editarPagamentoId').value = id;
+            document.getElementById('editarValor').value = valor;
+            document.getElementById('editarDescricao').value = descricao;
+            new bootstrap.Modal(document.getElementById('modalEditarPagamento')).show();
+        }
+
+        async function salvarEdicaoPagamento() {
+            const id = document.getElementById('editarPagamentoId').value;
+            const valor = parseFloat(document.getElementById('editarValor').value);
+            const descricao = document.getElementById('editarDescricao').value;
+
+            if (!valor || valor <= 0) {
+                alert('Informe um valor válido');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/pagamentos/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ valor, descricao })
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalEditarPagamento')).hide();
+                    carregarPagamentos();
+                    alert('Pagamento atualizado com sucesso!');
+                } else {
+                    const erro = await response.text();
+                    alert('Erro ao atualizar pagamento: ' + erro);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+        }
+
+        carregarPagamentos();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

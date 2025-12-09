@@ -1,12 +1,9 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.Pessoas;
 
 import sistema.os.domain.Entidades.Pessoa;
-import sistema.os.domain.Enums.TipoPessoa;
 import sistema.os.domain.Interfaces.IPessoaRepository;
-import sistema.os.domain.ValueObjects.CpfCnpj;
-import sistema.os.domain.ValueObjects.Telefone;
-import sistema.os.API.DTOs.Requests.CriarPessoaRequest;
-import sistema.os.API.DTOs.Responses.CriarPessoaResponse;
+import sistema.os.API.DTOs.Requests.Pessoas.CriarPessoaRequest;
+import sistema.os.API.DTOs.Responses.Pessoas.CriarPessoaResponse;
 
 public class CriarPessoaUseCase {
     private final IPessoaRepository repository;
@@ -17,11 +14,19 @@ public class CriarPessoaUseCase {
 
     // Cria e persiste nova pessoa
     public CriarPessoaResponse executar(CriarPessoaRequest request) {
-        CpfCnpj cpfCnpj = new CpfCnpj(request.cpfCnpj());
-        Telefone telefone = new Telefone(request.telefone());
-        TipoPessoa tipo = TipoPessoa.valueOf(request.tipo().toUpperCase());
-
-        Pessoa pessoa = new Pessoa(request.nome(), cpfCnpj, telefone, tipo);
+        Pessoa pessoa = new Pessoa(
+            request.tipoPessoa(),
+            request.nome(),
+            request.cpfCnpj(),
+            request.telefone(),
+            request.email(),
+            request.cep(),
+            request.logradouro(),
+            request.numero(),
+            request.bairro(),
+            request.cidade(),
+            request.uf()
+        );
 
         try {
             repository.salvar(pessoa);
@@ -32,10 +37,16 @@ public class CriarPessoaUseCase {
         return new CriarPessoaResponse(
             pessoa.getId().toString(),
             pessoa.getNome(),
-            pessoa.getCpfCnpj().getValor(),
-            pessoa.getTelefone().getValor(),
-            pessoa.getTipo().name(),
-            pessoa.getStatus().name(),
+            pessoa.getCpfCnpj(),
+            pessoa.getTelefone(),
+            pessoa.getTipoPessoa(),
+            pessoa.getEmail(),
+            pessoa.getCep(),
+            pessoa.getLogradouro(),
+            pessoa.getNumero(),
+            pessoa.getBairro(),
+            pessoa.getCidade(),
+            pessoa.getUf(),
             pessoa.getDataCadastro()
         );
     }

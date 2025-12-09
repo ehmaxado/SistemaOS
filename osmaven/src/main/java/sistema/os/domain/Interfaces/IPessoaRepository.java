@@ -8,5 +8,6 @@ public interface IPessoaRepository {
     void salvar(Pessoa pessoa);
     List<Pessoa> buscarTodas();
     Pessoa buscarPorId(UUID id);
+    void atualizar(Pessoa pessoa);
     boolean deletar(UUID id);
 }

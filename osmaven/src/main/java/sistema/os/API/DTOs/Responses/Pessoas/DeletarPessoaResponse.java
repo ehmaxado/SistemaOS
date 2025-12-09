@@ -1,4 +1,4 @@
-package sistema.os.API.DTOs.Responses;
+package sistema.os.API.DTOs.Responses.Pessoas;
 
 public class DeletarPessoaResponse {
     public String id;

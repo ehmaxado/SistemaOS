@@ -1,8 +1,8 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.FormaPagamentos;
 
 import java.util.UUID;
 
-import sistema.os.API.DTOs.Responses.DeletarFormaPagamentoResponse;
+import sistema.os.API.DTOs.Responses.FormaPagamentos.DeletarFormaPagamentoResponse;
 import sistema.os.domain.Interfaces.IFormaPagamentoRepository;
 
 public class DeletarFormaPagamentoUseCase {

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema OS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="bi bi-tools"></i> Sistema OS
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ordens-servico.html">Ordens de Serviço</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pessoas.html">Pessoas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="produtos.html">Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="servicos.html">Serviços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="formas-pagamento.html">Formas de Pagamento</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pagamentos.html">Pagamentos</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="navbar-text me-3" id="nomeUsuario"></span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="bi bi-box-arrow-right"></i> Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">Dashboard</h2>
+
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-file-earmark-text"></i> Ordens de Serviço
+                        </h5>
+                        <h2 id="totalOS">0</h2>
+                        <a href="ordens-servico.html" class="btn btn-light btn-sm">Ver todas</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-people"></i> Pessoas
+                        </h5>
+                        <h2 id="totalPessoas">0</h2>
+                        <a href="pessoas.html" class="btn btn-light btn-sm">Ver todas</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-warning">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-box"></i> Produtos
+                        </h5>
+                        <h2 id="totalProdutos">0</h2>
+                        <a href="produtos.html" class="btn btn-light btn-sm">Ver todos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-wrench"></i> Serviços
+                        </h5>
+                        <h2 id="totalServicos">0</h2>
+                        <a href="servicos.html" class="btn btn-light btn-sm">Ver todos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-secondary">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-credit-card"></i> Formas de Pagamento
+                        </h5>
+                        <h2 id="totalFormasPagamento">0</h2>
+                        <a href="formas-pagamento.html" class="btn btn-light btn-sm">Ver todas</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-cash-stack"></i> Pagamentos
+                        </h5>
+                        <h2 id="totalPagamentos">0</h2>
+                        <a href="pagamentos.html" class="btn btn-light btn-sm">Ver todos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-clock-history"></i> Últimas Ordens de Serviço</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Número OS</th>
+                                        <th>Cliente</th>
+                                        <th>Data</th>
+                                        <th>Valor Total</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ultimasOS">
+                                    <tr>
+                                        <td colspan="5" class="text-center">Carregando...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+
+        // Verificar se está logado
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+        if (!usuario.email) {
+            window.location.href = 'index.html';
+        }
+        document.getElementById('nomeUsuario').textContent = usuario.nome || usuario.email;
+
+        function logout() {
+            localStorage.removeItem('usuario');
+            window.location.href = 'index.html';
+        }
+
+        // Carregar estatísticas
+        async function carregarEstatisticas() {
+            try {
+                const [osRes, pessoasRes, produtosRes, servicosRes, formasPagRes, pagamentosRes] = await Promise.all([
+                    fetch(`${API_URL}/ordens-servico`),
+                    fetch(`${API_URL}/pessoas`),
+                    fetch(`${API_URL}/produtos`),
+                    fetch(`${API_URL}/servicos`),
+                    fetch(`${API_URL}/formas-pagamento`),
+                    fetch(`${API_URL}/pagamentos`)
+                ]);
+
+                if (osRes.ok) {
+                    const os = await osRes.json();
+                    document.getElementById('totalOS').textContent = os.length || 0;
+                    exibirUltimasOS(os.slice(0, 5));
+                }
+                if (pessoasRes.ok) {
+                    const pessoas = await pessoasRes.json();
+                    document.getElementById('totalPessoas').textContent = pessoas.total || pessoas.length || 0;
+                }
+                if (produtosRes.ok) {
+                    const produtos = await produtosRes.json();
+                    document.getElementById('totalProdutos').textContent = produtos.length || 0;
+                }
+                if (servicosRes.ok) {
+                    const servicos = await servicosRes.json();
+                    document.getElementById('totalServicos').textContent = servicos.length || 0;
+                }
+                if (formasPagRes.ok) {
+                    const formasPag = await formasPagRes.json();
+                    document.getElementById('totalFormasPagamento').textContent = formasPag.total || formasPag.formas?.length || 0;
+                }
+                if (pagamentosRes.ok) {
+                    const pagamentos = await pagamentosRes.json();
+                    document.getElementById('totalPagamentos').textContent = pagamentos.length || 0;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+            }
+        }
+
+        function exibirUltimasOS(ordens) {
+            const tbody = document.getElementById('ultimasOS');
+            if (!ordens || ordens.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhuma ordem de serviço encontrada</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = ordens.map(os => `
+                <tr>
+                    <td>${os.numeroOS || '-'}</td>
+                    <td>${os.clienteId || '-'}</td>
+                    <td>${os.dataAbertura ? new Date(os.dataAbertura).toLocaleDateString() : '-'}</td>
+                    <td>R$ ${(os.valorTotalFinal || 0).toFixed(2)}</td>
+                    <td>
+                        <a href="ordem-servico-detalhes.html?id=${os.id}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        carregarEstatisticas();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

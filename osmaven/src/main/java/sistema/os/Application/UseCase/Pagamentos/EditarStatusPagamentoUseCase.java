@@ -1,10 +1,10 @@
-package sistema.os.Application.UseCase;
+package sistema.os.Application.UseCase.Pagamentos;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import sistema.os.API.DTOs.Requests.EditarStatusPagamentoRequest;
-import sistema.os.API.DTOs.Responses.EditarStatusPagamentoResponse;
+import sistema.os.API.DTOs.Requests.Pagamentos.EditarStatusPagamentoRequest;
+import sistema.os.API.DTOs.Responses.Pagamentos.EditarStatusPagamentoResponse;
 import sistema.os.domain.Entidades.Pagamento;
 import sistema.os.domain.Enums.StatusPagamento;
 import sistema.os.domain.Interfaces.IPagamentoRepository;

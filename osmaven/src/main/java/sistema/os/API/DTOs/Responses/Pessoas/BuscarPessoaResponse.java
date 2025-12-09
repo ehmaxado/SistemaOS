@@ -1,27 +1,43 @@
-package sistema.os.API.DTOs.Responses;
+package sistema.os.API.DTOs.Responses.Pessoas;
 
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({"id", "nome", "cpfCnpj", "telefone", "tipoPessoa", "email", "cep", "logradouro", "numero", "bairro", "cidade", "uf", "dataCadastro"})
 public class BuscarPessoaResponse {
     public String id;
     public String nome;
     public String cpfCnpj;
     public String telefone;
-    public String tipo;
-    public String status;
+    public String tipoPessoa;
+    public String email;
+    public String cep;
+    public String logradouro;
+    public String numero;
+    public String bairro;
+    public String cidade;
+    public String uf;
     public LocalDateTime dataCadastro;
 
     public BuscarPessoaResponse() {
     }
 
     public BuscarPessoaResponse(String id, String nome, String cpfCnpj, String telefone,
-                               String tipo, String status, LocalDateTime dataCadastro) {
+                               String tipoPessoa, String email, String cep, String logradouro,
+                               String numero, String bairro, String cidade, String uf,
+                               LocalDateTime dataCadastro) {
         this.id = id;
         this.nome = nome;
         this.cpfCnpj = cpfCnpj;
         this.telefone = telefone;
-        this.tipo = tipo;
-        this.status = status;
+        this.tipoPessoa = tipoPessoa;
+        this.email = email;
+        this.cep = cep;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.uf = uf;
         this.dataCadastro = dataCadastro;
     }
 
@@ -57,20 +73,20 @@ public class BuscarPessoaResponse {
         this.telefone = telefone;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getTipoPessoa() {
+        return tipoPessoa;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTipoPessoa(String tipoPessoa) {
+        this.tipoPessoa = tipoPessoa;
     }
 
-    public String getStatus() {
-        return status;
+    public String getEmail() {
+        return email;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public LocalDateTime getDataCadastro() {
