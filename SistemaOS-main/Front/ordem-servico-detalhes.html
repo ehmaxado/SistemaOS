@@ -831,9 +831,6 @@
                                 <button class="btn btn-sm btn-warning me-1" onclick="editarPagamento('${p.id}', ${p.valor}, '${(p.descricao || '').replace(/'/g, "\\'")}')">
                                     <i class="bi bi-pencil"></i>
                                 </button>
-                                <button class="btn btn-sm btn-success me-1" onclick="confirmarPagamento('${p.id}')">
-                                    <i class="bi bi-check-circle"></i>
-                                </button>
                                 <button class="btn btn-sm btn-danger" onclick="deletarPagamento('${p.id}')">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -934,28 +931,6 @@
                 } else {
                     const erro = await response.text();
                     alert('Erro ao atualizar pagamento: ' + erro);
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                alert('Erro ao conectar com o servidor');
-            }
-        }
-
-        async function confirmarPagamento(id) {
-            if (!confirm('Confirmar o pagamento?')) return;
-
-            try {
-                const response = await fetch(`${API_URL}/pagamentos/${id}/status`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ status: 'PAGO' })
-                });
-
-                if (response.ok) {
-                    await carregarPagamentosOS();
-                    alert('Pagamento confirmado!');
-                } else {
-                    alert('Erro ao confirmar pagamento');
                 }
             } catch (error) {
                 console.error('Erro:', error);
